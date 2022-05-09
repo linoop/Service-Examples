@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.startService).setOnClickListener {
           Intent(this, MyService::class.java).also {
               startService(it)
+
           }
         }
     }
