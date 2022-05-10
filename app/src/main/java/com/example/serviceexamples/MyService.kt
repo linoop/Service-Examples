@@ -50,6 +50,8 @@ class MyService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val name = intent.getStringExtra("name")
+        showMessage(name.toString())
         showMessage("service starting")
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
