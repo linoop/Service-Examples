@@ -7,56 +7,68 @@ import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.widget.Button
+import android.widget.TextView
+import com.example.serviceexamples.services.MyService
+import com.example.serviceexamples.services.SimpleBindService
 
 class MainActivity : AppCompatActivity() {
-    private val TAG = "MainActivityLog"
-    private lateinit var bindService: LocalService
-    //private lateinit var localBinder: BindService.LocalBinder
-    private var mBound: Boolean = false
-
-    private val connection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            val binder = service as LocalService.LocalBinder
-            bindService = binder.getService()
-            mBound = true
-        }
-
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            mBound = false
-        }
-    }
-
-
-    override fun onStop() {
-        super.onStop()
-        unbindService(connection)
-        mBound = false
-    }
-
-    fun onBindServiceClick() {
-        Intent(this, LocalService::class.java).also { intent ->
-            bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        }
-    }
+    private lateinit var service: SimpleBindService
+    private var bound = false
+    private lateinit var message: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        message = findViewById(R.id.message)
+
         findViewById<Button>(R.id.startService).setOnClickListener {
-          Intent(this, MyService::class.java).also {
-              it.putExtra("name", "linoop")
-              startService(it)
-          }
+            Intent(this, MyService::class.java).also {
+                startService(it)
+            }
         }
 
         findViewById<Button>(R.id.bindService).setOnClickListener {
-            onBindServiceClick()
+            getServiceDetails()
+        }
+        findViewById<Button>(R.id.gotoMessenger).setOnClickListener {
+           Intent(this, MessengerActivity::class.java).also {
+               startActivity(it)
+           }
         }
     }
 
-    private fun showMessage(message: String) {
-        Log.d(TAG, message)
+    override fun onStart() {
+        super.onStart()
+        Intent(this, SimpleBindService::class.java).also {
+            it.putExtra("name", "name linoop")
+            bindService(it, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(connection)
+        bound = false
+    }
+
+    private fun getServiceDetails() {
+        if (bound) {
+            val details = service.getDetails()
+            message.text = details
+        }
+    }
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
+            val binder = p1 as SimpleBindService.LocalBinder
+            service = binder.getService()
+            bound = true
+        }
+
+        override fun onServiceDisconnected(p0: ComponentName?) {
+            bound = false
+        }
     }
 }

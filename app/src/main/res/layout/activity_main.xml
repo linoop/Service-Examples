@@ -16,6 +16,12 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="message" />
+
         <Button
             android:id="@+id/startService"
             android:layout_width="match_parent"
@@ -27,8 +33,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Bind service" />
-
-
+        <Button
+            android:id="@+id/gotoMessenger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Goto messenger" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
