@@ -12,15 +12,14 @@ import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivityLog"
-    //private lateinit var bindService: BindService
-    private lateinit var localBinder: BindService.LocalBinder
+    private lateinit var bindService: LocalService
+    //private lateinit var localBinder: BindService.LocalBinder
     private var mBound: Boolean = false
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            //val binder = service as BindService.LocalBinder
-            //bindService = binder.getService()
-            localBinder = service as BindService.LocalBinder
+            val binder = service as LocalService.LocalBinder
+            bindService = binder.getService()
             mBound = true
         }
 
@@ -29,12 +28,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Intent(this, BindService::class.java).also { intent ->
-            bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        }
-    }
 
     override fun onStop() {
         super.onStop()
@@ -43,10 +36,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onBindServiceClick() {
-        if (mBound) {
-            //val name: String = bindService.getName()
-            val result = localBinder.getAddress()
-            showMessage(result)
+        Intent(this, LocalService::class.java).also { intent ->
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
     }
 
