@@ -33,16 +33,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Bind service" />
+
         <Button
             android:id="@+id/startCounter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Start counter" />
+
         <Button
             android:id="@+id/gotoMessenger"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Goto messenger" />
+
+        <Button
+            android:id="@+id/gotoLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Goto Location" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

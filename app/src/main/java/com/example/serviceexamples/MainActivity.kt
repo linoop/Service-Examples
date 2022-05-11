@@ -37,7 +37,11 @@ class MainActivity : AppCompatActivity() {
                startActivity(it)
            }
         }
-
+        findViewById<Button>(R.id.gotoLocation).setOnClickListener {
+            Intent(this, LocationActivity::class.java).also {
+                startActivity(it)
+            }
+        }
         findViewById<Button>(R.id.startCounter).setOnClickListener {
             startCounter()
         }
@@ -74,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         override fun onServiceConnected(p0: ComponentName?, iBinder: IBinder?) {
             val binder = iBinder as SimpleBindService.LocalBinder
             service = binder.getService()
-            binder.printCount()
+            //binder.printCount()
             bound = true
         }
 
