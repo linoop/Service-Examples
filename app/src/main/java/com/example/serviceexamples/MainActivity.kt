@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity() {
                startActivity(it)
            }
         }
+
+        findViewById<Button>(R.id.startCounter).setOnClickListener {
+            service.printNumber()
+        }
     }
 
     override fun onStart() {
@@ -61,8 +65,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val connection = object : ServiceConnection {
-        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-            val binder = p1 as SimpleBindService.LocalBinder
+        override fun onServiceConnected(p0: ComponentName?, iBinder: IBinder?) {
+            val binder = iBinder as SimpleBindService.LocalBinder
             service = binder.getService()
             bound = true
         }
