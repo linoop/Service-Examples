@@ -22,9 +22,11 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.MyService" />
+        <service
+            android:name=".services.MyService"
+            android:exported="true" />
         <service android:name=".services.SimpleBindService" />
-        <service android:name=".services.MessengerService"/>
+        <service android:name=".services.MessengerService" />
     </application>
 
 </manifest>

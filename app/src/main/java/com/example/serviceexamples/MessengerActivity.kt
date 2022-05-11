@@ -52,7 +52,7 @@ class MessengerActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        Intent(this, MessengerService::class.java).also { intent ->
+        Intent(this, Class.forName("com.example.serviceexamples.services.MessengerService")/*MessengerService::class.java*/).also { intent ->
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
         }
     }
