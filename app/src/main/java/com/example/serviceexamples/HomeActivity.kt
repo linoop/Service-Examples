@@ -9,13 +9,13 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_home)
 
         findViewById<Button>(R.id.simpleService).setOnClickListener {
             Intent(this, SimpleServiceActivity::class.java).also { startActivity(it) }
         }
-        findViewById<Button>(R.id.bindService).setOnClickListener {
-            Intent(this, SimpleServiceActivity::class.java).also { startActivity(it) }
+        findViewById<Button>(R.id.boundService).setOnClickListener {
+            Intent(this, BoundServiceActivity::class.java).also { startActivity(it) }
         }
     }
 

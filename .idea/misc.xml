@@ -3,11 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/linoo/AndroidStudioProjects/ServiceExamples/app/src/main/res/layout/activity_main.xml" value="0.14402173913043478" />
+        <entry key="app/src/main/res/layout/activity_bound_service.xml" value="0.22509057971014493" />
         <entry key="app/src/main/res/layout/activity_location.xml" value="0.21557971014492755" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_message.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/activity_messenger.xml" value="0.16979166666666667" />
+        <entry key="app/src/main/res/layout/activity_simple_service.xml" value="0.22509057971014493" />
       </map>
     </option>
   </component>
