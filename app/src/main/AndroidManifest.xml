@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.serviceexamples">
+    package="com.example.serviceexamples" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -12,19 +12,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ServiceExamples">
+        android:theme="@style/Theme.ServiceExamples" >
         <activity
-            android:name=".LocationActivity"
+            android:name=".BoundServiceActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SimpleServiceActivity"
             android:exported="false" />
         <activity
-            android:name=".MessengerActivity"
+            android:name=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,11 +32,8 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".services.MyService"
-            android:exported="true" />
-        <service android:name=".services.SimpleBindService" />
-        <service android:name=".services.MessengerService" />
+        <service android:name=".services.MyService" />
+        <service android:name=".services.BoundService"/>
     </application>
 
 </manifest>

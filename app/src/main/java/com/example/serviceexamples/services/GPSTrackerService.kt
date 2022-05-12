@@ -1,7 +1,6 @@
 package com.example.serviceexamples.services
 
 import android.Manifest
-import android.R
 import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
@@ -14,11 +13,13 @@ import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import com.example.serviceexamples.R
+import kotlinx.coroutines.NonCancellable.cancel
 import java.io.IOException
 import java.util.*
 
 
-class GPSTrackerService(private val mContext: Context) : Service(), LocationListener {
+class GPSTrackerService : Service(), LocationListener {
     // Get Class Name
     private val TAG: String = GPSTrackerService::class.java.name
 
@@ -61,7 +62,7 @@ class GPSTrackerService(private val mContext: Context) : Service(), LocationList
      */
     fun getLocation() {
         try {
-            locationManager = mContext.getSystemService(LOCATION_SERVICE) as LocationManager
+            locationManager = applicationContext.getSystemService(LOCATION_SERVICE) as LocationManager
 
             //getting GPS status
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -95,10 +96,10 @@ class GPSTrackerService(private val mContext: Context) : Service(), LocationList
             // Application can use GPS or Network Provider
             if (provider_info.isNotEmpty()) {
                 if (ActivityCompat.checkSelfPermission(
-                        mContext,
+                        applicationContext,
                         Manifest.permission.ACCESS_FINE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        mContext,
+                        applicationContext,
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
@@ -191,16 +192,14 @@ class GPSTrackerService(private val mContext: Context) : Service(), LocationList
             //locationManager.removeUpdates(this@GPSTrackerService)
             locationManager!!.removeUpdates(this)
         }*/
-        locationManager.let {
-            it?.removeUpdates(this)
-        }
+        locationManager.removeUpdates(this)
     }
 
     /**
      * Function to show settings alert dialog
      */
-    fun showSettingsAlert() {
-        val alertDialog = AlertDialog.Builder(mContext)
+    fun showSettingsAlert(context: Context) {
+        val alertDialog = AlertDialog.Builder(context)
 
         //Setting Dialog Title
         alertDialog.setTitle("GPS Settings")
@@ -209,13 +208,13 @@ class GPSTrackerService(private val mContext: Context) : Service(), LocationList
         alertDialog.setMessage("Please enable gps")
 
         //On Pressing Setting button
-        alertDialog.setPositiveButton(R.string.ok) { dialog, which ->
+        alertDialog.setPositiveButton("Ok") { dialog, which ->
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            mContext.startActivity(intent)
+            context.startActivity(intent)
         }
 
         //On pressing cancel button
-        alertDialog.setNegativeButton(R.string.cancel) { dialog, which -> dialog.cancel() }
+        alertDialog.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
         alertDialog.show()
     }
 
@@ -242,7 +241,7 @@ class GPSTrackerService(private val mContext: Context) : Service(), LocationList
      */
     fun getAddressLine(context: Context?): String? {
         val addresses: List<Address>? = getGeocoderAddress(context)
-        return if (addresses != null && addresses.size > 0) {
+        return if (addresses != null && addresses.isNotEmpty()) {
             val address: Address = addresses[0]
             address.getAddressLine(0)
         } else {

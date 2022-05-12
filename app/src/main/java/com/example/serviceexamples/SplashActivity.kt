@@ -43,7 +43,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun startMainActivity() {
-        Intent(this, MainActivity::class.java).also { startActivity(it) }
+        Intent(this, HomeActivity::class.java).also { startActivity(it) }
     }
 
     private fun hasPermissions(vararg permissions: String): Boolean = permissions.all {
