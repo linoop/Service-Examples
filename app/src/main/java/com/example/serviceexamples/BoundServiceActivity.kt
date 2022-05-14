@@ -13,10 +13,13 @@ import com.example.serviceexamples.services.MessengerService
 import com.example.serviceexamples.services.MessengerService.Companion.MSG_REGISTER_CLIENT
 import com.example.serviceexamples.services.MessengerService.Companion.MSG_SET_VALUE
 import com.example.serviceexamples.services.MessengerService.Companion.MSG_UNREGISTER_CLIENT
+import com.example.serviceexamples.services.MessengerService.Companion.START_COUNTER
+import kotlin.concurrent.thread
 
 
 class BoundServiceActivity : AppCompatActivity() {
     private lateinit var mCallbackText: TextView
+    private lateinit var countTextView: TextView
 
     private lateinit var mService: Messenger
     private var bound: Boolean = false
@@ -26,12 +29,22 @@ class BoundServiceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bound_service)
         mCallbackText = findViewById(R.id.message)
+        countTextView = findViewById(R.id.counter)
         findViewById<Button>(R.id.bindService).setOnClickListener {
             doBindService()
         }
         findViewById<Button>(R.id.unbindService).setOnClickListener {
             doUnbindService()
         }
+        findViewById<Button>(R.id.startCounter).setOnClickListener {
+            startCounter()
+        }
+    }
+
+    private fun startCounter() {
+        val msg = Message.obtain(null, START_COUNTER, this.hashCode(), 0)
+        msg.data.putString("data", "This is my second request")
+        mService.send(msg)
     }
 
 
@@ -40,6 +53,10 @@ class BoundServiceActivity : AppCompatActivity() {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 MSG_SET_VALUE -> mCallbackText.text = "Received from service: " + msg.arg1
+                START_COUNTER -> {
+                    val count = msg.data.getString("count")
+                    countTextView.text = "Count: $count"
+                }
                 else -> super.handleMessage(msg)
             }
         }
@@ -58,6 +75,7 @@ class BoundServiceActivity : AppCompatActivity() {
                     null,
                     MSG_SET_VALUE, this.hashCode(), 0
                 )
+                msg.data.putString("data", "This is my request")
                 mService.send(msg)
             } catch (e: RemoteException) {
 
@@ -121,7 +139,6 @@ class BoundServiceActivity : AppCompatActivity() {
             mCallbackText.text = "Unbinding."
         }
     }
-
 
 
 }

@@ -30,10 +30,10 @@
             android:text="Bound service" />
 
         <Button
-            android:id="@+id/startCounter"
+            android:id="@+id/foregroundService"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start counter" />
+            android:text="Foreground service" />
 
         <Button
             android:id="@+id/gotoMessenger"

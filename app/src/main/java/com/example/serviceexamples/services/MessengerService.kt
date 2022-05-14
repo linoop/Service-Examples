@@ -3,9 +3,11 @@ package com.example.serviceexamples.services
 import android.app.*
 import android.content.Intent
 import android.os.*
+import android.util.Log
 import android.widget.Toast
 import com.example.serviceexamples.R
 import com.example.serviceexamples.SimpleServiceActivity
+import kotlin.concurrent.thread
 
 
 class MessengerService : Service() {
@@ -21,6 +23,8 @@ class MessengerService : Service() {
                 MSG_UNREGISTER_CLIENT -> mClients.remove(msg.replyTo)
                 MSG_SET_VALUE -> {
                     mValue = msg.arg1
+                    val request = msg.data.getString("data")
+                    Log.d(TAG, "request $request")
                     var i = mClients.size - 1
                     while (i >= 0) {
                         try {
@@ -36,7 +40,30 @@ class MessengerService : Service() {
                         i--
                     }
                 }
+                START_COUNTER -> startCounter()
                 else -> super.handleMessage(msg)
+            }
+        }
+    }
+
+    private fun startCounter() {
+        Log.d(TAG, "Counter started")
+        var i = mClients.size - 1
+        thread {
+            while (i >= 0) {
+                try {
+                    var count = 0
+                    while (count < 10) {
+                        val msg = Message.obtain(null, START_COUNTER, 0, 0)
+                        msg.data.putString("count", count.toString())
+                        mClients[i].send(msg)
+                        count++
+                        Thread.sleep(1000)
+                    }
+                } catch (e: RemoteException) {
+                    mClients.removeAt(i)
+                }
+                i--
             }
         }
     }
@@ -63,6 +90,7 @@ class MessengerService : Service() {
         notificationManager!!.cancel(R.string.service_stopped)
         Toast.makeText(this, "Service stopped", Toast.LENGTH_SHORT).show()
     }
+
     override fun onBind(intent: Intent): IBinder? {
         return mMessenger.binder
     }
@@ -71,7 +99,7 @@ class MessengerService : Service() {
         val intent = Intent(this, SimpleServiceActivity::class.java)
         val contentIntent = PendingIntent.getActivity(
             this, 0,
-            intent, PendingIntent.FLAG_UPDATE_CURRENT
+            intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         // Set the info for the views that show in the notification panel.
         val notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -100,5 +128,7 @@ class MessengerService : Service() {
         const val MSG_REGISTER_CLIENT = 1
         const val MSG_UNREGISTER_CLIENT = 2
         const val MSG_SET_VALUE = 3
+        const val START_COUNTER = 4
+        private const val TAG = "MessengerServiceLog"
     }
 }

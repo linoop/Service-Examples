@@ -17,6 +17,9 @@ class HomeActivity : AppCompatActivity() {
         findViewById<Button>(R.id.boundService).setOnClickListener {
             Intent(this, BoundServiceActivity::class.java).also { startActivity(it) }
         }
+        findViewById<Button>(R.id.foregroundService).setOnClickListener {
+            Intent(this, ForegroundServiceActivity::class.java).also { startActivity(it) }
+        }
     }
 
 }
